@@ -33,14 +33,13 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/filteredimage", async ( req, res ) => {
-    const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+  app.get( "/filteredimage", async (req: Request, res: Response) => {
     try {
-      const param = req.query.image_url;
-      if (!urlPattern.test(param)) {
-        res.status(500).send("Bad request")
+      let { image_url } = req.query;
+      if (!image_url) {
+        res.status(400).send("Bad request")
       }
-      const pathImage = await filterImageFromURL(param);
+      const pathImage = await filterImageFromURL(String(image_url));
       res.sendFile(pathImage, err => {
         if (err) {
           console.log(err);
@@ -49,7 +48,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
         deleteLocalFiles([pathImage]);
       });
     } catch (error) {
-      res.status(500).send("Server error")
+      res.status(400).send("Bad request")
     }
   } );
   
