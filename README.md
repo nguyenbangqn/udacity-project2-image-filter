@@ -1,1 +1,1 @@
-# udacity-project2-image-filter
+# The Image Filtering Microservice
